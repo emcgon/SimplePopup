@@ -1,48 +1,46 @@
-.simple-popup-stack {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  min-width: 48ch;
-  max-width: 72ch;
-  z-index: 314159;
-}
-
-.simple-popup {
-  --popup-animation-time: 250ms;
-  width: 100%;
-  border-radius: .5rem;
-/*   margin-top: 0.25rem; */
-  padding: 0.5rem 1rem;
-  transform-origin: center top;
-  transform: scale(0);
-  transition: transform var(--popup-animation-time) ease-in-out;
-}
-
-.simple-popup.visible {
-  transform: scale(1);
-}
-
-@media (prefers-reduced-motion) {
-  .popup {
-    --popup-animation-time: 1ms;  
-    transform: scale(1);
-  }
-}
-
-.simple-popup.error {
-  background: #c00;
-  color: white;
-  font-weight: bold;
-}
-
-.simple-popup.warning {
-  background: darkorange;
-  color: white;
-  font-weight: bold;
-}
-
-.simple-popup.info {
-  background: green;
-  color: white;
-  font-weight: bold;
+function SimplePopup(afterSelector, classList, content, removeAfter=5000, clearOthers=false)
+{
+    function remove(popup)
+    {
+        const s = getComputedStyle(popup).getPropertyValue('--popup-animation-time');
+        let animationTime = parseFloat(s)
+        if (!s.endsWith("ms")) animationTime *= 1000
+        const stack = popup.parentElement   // Should be div.popup-stack
+        popup.classList.remove("simple-popup-visible")
+        setTimeout(() => {
+            popup.remove()
+            console.log(stack)
+            if (stack.childElementCount === 0)
+            {
+                stack.remove()
+            }
+        }, animationTime)
+    }
+  
+    // Look for a div#popup-stack element after the specified element. If there isn't one, create it
+    const after = document.querySelector(afterSelector)
+    const afterNextSibling = after.nextElementSibling
+    let stack
+    if ((afterNextSibling.tagName === "DIV") && (afterNextSibling.classList.contains("simple-popup-stack")))
+    {
+        stack = afterNextSibling
+    }
+    else
+    {
+        stack = document.createElement("div")
+        stack.classList.add("simple-popup-stack")
+        after.insertAdjacentElement("afterend", stack)
+    }
+    if (clearOthers && stack.children)
+    {
+        stack.querySelectorAll(".simple-popup").forEach(c => c.remove())
+    }
+    const p = document.createElement("div")
+    p.classList.add("simple-popup")
+    classList.map(cl => p.classList.add(cl))
+    p.innerHTML = content
+    stack.insertAdjacentElement("beforeend", p)
+    setTimeout(() => p.classList.add("visible"), 1)
+    if (removeAfter) setTimeout(() => remove(p), removeAfter)
+    p.addEventListener("click", ev => remove(p))
 }
