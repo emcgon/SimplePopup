@@ -41,6 +41,11 @@ function SimplePopup(afterSelector, classList, content, removeAfter=5000, clearO
     p.innerHTML = content
     stack.insertAdjacentElement("beforeend", p)
     setTimeout(() => p.classList.add("visible"), 1)
-    if (removeAfter) setTimeout(() => remove(p), removeAfter)
-    p.addEventListener("click", ev => remove(p))
+    if (removeAfter) {
+        p.dataset.timeout = setTimeout(() => remove(p), removeAfter)
+    }
+    p.addEventListener("click", ev => {
+        p.dataset.timeout && clearTimeout(p.dataset.timeout)
+        remove(p)
+    })
 }
