@@ -18,10 +18,10 @@ A very simple way of generating very simple pop-up messages in pure Javascript.
   </body>
 
   <script>
-    SimplePopup("div#simplepopup",         // This is the element to insert the pop-up after
+    SimplePopup("div#simplepopup",         // This is the element to insert the pop-ups into
                 ["error",],   // A list of optional classes to apply to the popup
                 "This is an error-message",  // The (HTML) content to place into the popup
-                5000,         // Automatically remove the popup after this many milliseconds (optional, defaults to 5000)
+                5000,         // Automatically remove the popup after this many milliseconds (optional, defaults to indefinite)
                 false)        // Remove all other popups in the same position before displaying this (options, defaults to false)
   </script>
 </html>
