@@ -8,6 +8,7 @@
     align-items: center;
     gap: 0.25rem;
     z-index: 314159;
+    pointer-events: none; 
 }
 
 /* If we have to create a (temporary) container for alerts, put them on the centre of the screen */
@@ -15,7 +16,6 @@
     position: fixed;
     top: 0;
     bottom: 0;
-    pointer-events: none; 
 }
 
 .simple-popup {
